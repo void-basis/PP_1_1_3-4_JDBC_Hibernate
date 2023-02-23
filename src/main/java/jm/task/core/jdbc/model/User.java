@@ -28,8 +28,9 @@ public class User {
         this.lastName = lastName;
         this.age = age;
     }
+
     @Override
-    public String toString () {
+    public String toString() {
         return "Имя - " + name + " Фамилия - " + lastName + " Возраст - " + age;
     }
 

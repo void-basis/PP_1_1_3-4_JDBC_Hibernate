@@ -1,4 +1,5 @@
 package jm.task.core.jdbc.dao;
+
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
@@ -22,24 +23,23 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
 
-
     public UserDaoJDBCImpl() {
 
     }
 
     public void createUsersTable() {
-            try {
-                statement.executeUpdate("DROP TABLE IF EXISTS users");
-                statement.executeUpdate("CREATE TABLE users (Id INT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(20), Last_Name VARCHAR(20), Age INT)");
-            } catch (SQLException e) {
-                System.out.println("error on create a table..");
-                throw new RuntimeException(e);
-            }
+        try {
+            statement.executeUpdate("DROP TABLE IF EXISTS users");
+            statement.executeUpdate("CREATE TABLE users (Id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20), lastName VARCHAR(20), age INT)");
+        } catch (SQLException e) {
+            System.out.println("error on create a table..");
+            throw new RuntimeException(e);
+        }
     }
 
     public void dropUsersTable() {
         try {
-                statement.executeUpdate("DROP TABLE IF EXISTS users");
+            statement.executeUpdate("DROP TABLE IF EXISTS users");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -47,7 +47,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT into users (Name, Last_Name, Age) values (?, ?, ?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO users (name, lastName, age) VALUES (?, ?, ?)");
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setInt(3, age);
@@ -73,22 +73,22 @@ public class UserDaoJDBCImpl implements UserDao {
         try {
             resultSet = statement.executeQuery("SELECT * FROM users");
 
-        while(resultSet.next()) {
-            String s1 = resultSet.getString(2);
-            String s2 = resultSet.getString(3);
-            int age = resultSet.getInt(4);
-            User esr = new User(s1, s2, (byte)age);
-            lst.add(esr);
-        }
-        } catch (SQLException e) {
-                throw new RuntimeException(e);
+            while (resultSet.next()) {
+                String s1 = resultSet.getString(2);
+                String s2 = resultSet.getString(3);
+                int age = resultSet.getInt(4);
+                User esr = new User(s1, s2, (byte) age);
+                lst.add(esr);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return lst;
     }
 
     public void cleanUsersTable() {
         try {
-            statement.executeUpdate("DELETE from users");
+            statement.executeUpdate("DELETE FROM users");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

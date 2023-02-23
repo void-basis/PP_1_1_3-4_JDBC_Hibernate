@@ -1,14 +1,10 @@
 package jm.task.core.jdbc.dao;
 
-
-
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import java.sql.SQLSyntaxErrorException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
@@ -18,12 +14,11 @@ public class UserDaoHibernateImpl implements UserDao {
 
     }
 
-
     @Override
     public void createUsersTable() {
         Session session = factory.openSession();
         session.beginTransaction();
-        session.createSQLQuery("CREATE TABLE if not exists users (Id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20), lastName VARCHAR(20), age INT)").executeUpdate();    //CREATE TABLE users (Name VARCHAR(20), Last_Name VARCHAR(20), Age INT)
+        session.createSQLQuery("CREATE TABLE IF NOT EXISTS users (Id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(20), lastName VARCHAR(20), age INT)").executeUpdate();
         session.getTransaction().commit();
     }
 
@@ -39,8 +34,8 @@ public class UserDaoHibernateImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         Session session = factory.openSession();
         session.beginTransaction();
-        User user = new User("1", "2", (byte) 3); //вынести юзера в полt
-       session.save(user);
+        User user = new User("1", "2", (byte) 3);
+        session.save(user);
         user.setAge(age);
         user.setName(name);
         user.setLastName(lastName);
@@ -49,11 +44,11 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-            Session session = factory.openSession();
-            session.beginTransaction();
-            User user = session.get(User.class, id);    //вынести юзера в поле
-            session.remove(user);
-            session.getTransaction().commit();
+        Session session = factory.openSession();
+        session.beginTransaction();
+        User user = session.get(User.class, id);
+        session.remove(user);
+        session.getTransaction().commit();
     }
 
     @Override
