@@ -2,6 +2,7 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -44,21 +45,26 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void removeUserById(long id) {
-        Session session = factory.openSession();
-        session.beginTransaction();
-        User user = session.get(User.class, id);
-        session.remove(user);
-        session.getTransaction().commit();
+        try {
+            Session session = factory.openSession();
+            session.beginTransaction();
+            User user = session.get(User.class, id);
+            session.remove(user);
+            session.getTransaction().commit();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            System.out.println("такого юзера нет в базе");
+        }
     }
 
     @Override
     public List<User> getAllUsers() {
-        List<User> lst;
-        Session session = factory.openSession();
-        session.beginTransaction();
-        lst = session.createQuery("from User").getResultList();
-        session.getTransaction().commit();
-        return lst;
+            List<User> lst;
+            Session session = factory.openSession();
+            session.beginTransaction();
+            lst = session.createQuery("from User").getResultList();
+            session.getTransaction().commit();
+            return lst;
     }
 
     @Override
